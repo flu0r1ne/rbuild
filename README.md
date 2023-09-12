@@ -28,26 +28,54 @@ on my radar, it's taken a backseat since this simpler version fulfills my curren
 
 ## How to Use
 
-To schedule the script to run at 3:00 a.m. on an Ubuntu host, follow these steps:
+### Cron
+
+To schedule the script to run every 30 minutes on an Ubuntu host, follow these steps:
 
 1. Make the script executable:
 
-	```bash
+	```
 	chmod +x rbuild.py
 	mv rbuild.py /usr/local/bin/
 	```
 
 2. Open the crontab editor:
 
-	```bash
+	```
 	crontab -e
 	```
 
 3. Add the following line to run the script every 30 minutes:
 
-	```cron
-	*/30 * * * * /usr/local/bin/rbuild.py
 	```
+	*/30 * * * * /usr/local/bin/rbuild.py /path/to/your/compose.yml
+	```
+
+### systemd
+
+Rebuild the site at 3 AM.
+
+```
+[Unit]
+Description=Rebuild site
+
+[Service]
+ExecStart=/usr/local/bin/rbuild.py /path/to/your/compose.yml --force-rebuild
+```
+
+```
+[Unit]
+Description=Rebuild site at 3AM
+
+[Timer]
+OnBootSec=3min
+# 3AM
+OnCalendar=*-*-* 3:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+```
 
 ### Environment Variables
 
