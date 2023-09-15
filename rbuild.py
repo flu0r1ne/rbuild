@@ -164,7 +164,7 @@ if __name__ == '__main__':
 
 	parser = argparse.ArgumentParser(description='Automatically rebuild a series of containers with docker compose.')
 
-	parser.add_argument('filename', type=str, help='The docker-compose file to use.')
+	parser.add_argument('filename', type=str, nargs='+', help='The docker-compose file to use.')
 
 	parser.add_argument('--build-period', type=int, default=BUILD_TTL, help='Time images are allowed to live (in seconds.)')
 	parser.add_argument('--up-timeout-period', type=int, default=UP_TIMEOUT_PERIOD, help='Up timeout period in seconds.')
@@ -185,8 +185,10 @@ if __name__ == '__main__':
 	if args.remove_images and args.force_rebuild:
 		die("Error: --remove-images cannot be used with --force-rebuild")
 
-	if args.remove_images:
-		remove_main(args.filename)
+	for filename in args.filename:
 
-	build_main(args.filename, force_rebuild=args.force_rebuild)
+		if args.remove_images:
+			remove_main(filename)
+
+		build_main(filename, force_rebuild=args.force_rebuild)
 

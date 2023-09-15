@@ -85,21 +85,21 @@ WantedBy=timers.target
 ## Usage
 
 ```
-usage: rbuild.py [-h] [--build-period BUILD_PERIOD] [--up-timeout-period UP_TIMEOUT_PERIOD] [--force-rebuild] [--remove-images] filename
+usage: rbuild.py [-h] [--build-period BUILD_PERIOD] [--up-timeout-period UP_TIMEOUT_PERIOD] [--force-rebuild] [--remove-images] filename [filename ...]
 
-Automatically rebuild a series of containers using Docker Compose.
+Automatically rebuild a series of containers with docker compose.
 
 positional arguments:
   filename              The docker-compose file to use.
 
 options:
-  -h, --help            Show this help message and exit.
+  -h, --help            show this help message and exit
   --build-period BUILD_PERIOD
-                        Rebuild period in seconds.
+                        Time images are allowed to live (in seconds.)
   --up-timeout-period UP_TIMEOUT_PERIOD
-                        Timeout period for bringing up containers in seconds.
-  --force-rebuild       Force a rebuild of all containers.
-  --remove-images       Remove all existing images.
+                        Up timeout period in seconds.
+  --force-rebuild       Force all containers to be rebuilt
+  --remove-images       Remove all images
 ```
 
 ## License
