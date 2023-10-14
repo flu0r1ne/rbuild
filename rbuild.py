@@ -169,6 +169,7 @@ if __name__ == '__main__':
 	parser.add_argument('--build-period', type=int, default=BUILD_TTL, help='Time images are allowed to live (in seconds.)')
 	parser.add_argument('--up-timeout-period', type=int, default=UP_TIMEOUT_PERIOD, help='Up timeout period in seconds.')
 	parser.add_argument('--force-rebuild', default=False, action='store_true', help='Force all containers to be rebuilt')
+	parser.add_argument('--prune-image-cache', default=False, action='store_true', help='Prune the global image cache')
 
 	# Add remove-images to the mutually exclusive group
 	parser.add_argument('--remove-images', default=False, action='store_true', help='Remove all images')
@@ -190,5 +191,18 @@ if __name__ == '__main__':
 		if args.remove_images:
 			remove_main(filename)
 
-		build_main(filename, force_rebuild=args.force_rebuild)
+		build_main(
+			filename,
+			force_rebuild=args.force_rebuild,
+		)
+
+	# Prune the image build cache if requested. The image build cache can gobble
+	# up system disk space. A better implementation may create an isolated
+	# buildkit instance, ideally providing rbuild a separate cache. The
+	# documentation for buildkit instances are fairly sparse and I may add this
+	# in the future.
+	if args.prune_image_cache:
+		subprocess.run([
+			"docker", "buildx", "prune", "--force"
+		], check=True)
 
